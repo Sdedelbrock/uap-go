@@ -2,8 +2,7 @@ package uaparser
 
 import (
 	"bytes"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
+	"encoding/json"
 	"reflect"
 	"regexp"
 	"sync"
@@ -45,16 +44,16 @@ func ToStruct(interfaceArr []map[string]string, typeInterface interface{}, retur
 	*returnVal = structArr
 }
 
-func New(regexFile string) (*Parser, error) {
+func New() (*Parser, error) {
 	parser := new(Parser)
 
-	data, err := ioutil.ReadFile(regexFile)
+	data, err := Asset("ua.json")
 	if nil != err {
 		return nil, err
 	}
 
 	m := make(map[string][]map[string]string)
-	err = yaml.Unmarshal(data, &m)
+	err = json.Unmarshal(data, &m)
 	if err != nil {
 		return nil, err
 	}
